@@ -1,25 +1,27 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Name Recall App</title>
-    
+    <title>anoano - 名前覚えアプリ</title>
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
+
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
 
     <!-- App Header -->
     <header class="app-header">
-        <h1 class="app-title"><i class="fa-solid fa-brain"></i> Memory<span class="highlight">Sync</span></h1>
+        <h1 class="app-title"><i class="fa-solid fa-brain"></i> anoano</h1>
         <div class="header-actions">
             <button class="icon-btn" id="btn-show-tags" aria-label="Tags">
                 <i class="fa-solid fa-tags"></i>
@@ -31,17 +33,18 @@
     </header>
 
     <main class="app-main">
-        
+
         <!-- Screen 1: Top List (Home) -->
         <section id="screen-home" class="screen active">
             <div class="search-bar">
                 <i class="fa-solid fa-search"></i>
                 <input type="text" id="search-input" placeholder="名前やタグで検索...">
             </div>
-            
+
             <div class="filter-status" id="filter-status" style="display: none;">
                 <span class="filter-label">タグで絞り込み中:</span>
-                <span class="tag-badge active filter-badge" id="current-filter-tag">#タグ名 <i class="fa-solid fa-xmark"></i></span>
+                <span class="tag-badge active filter-badge" id="current-filter-tag">#タグ名 <i
+                        class="fa-solid fa-xmark"></i></span>
             </div>
 
             <div class="people-grid" id="people-list">
@@ -60,10 +63,10 @@
                 <button class="back-btn" id="btn-back-form"><i class="fa-solid fa-arrow-left"></i> 戻る</button>
                 <h2 id="form-title">新しい人を追加</h2>
             </div>
-            
+
             <form id="person-form" class="modern-form">
                 <input type="hidden" id="form-id">
-                
+
                 <div class="avatar-selector">
                     <div class="avatar-preview" id="avatar-preview">
                         <i class="fa-solid fa-user"></i>
@@ -81,7 +84,7 @@
                     <input type="text" id="input-tags" placeholder="例: ゴルフ, 犬好き, IT系">
                     <p class="hint">特徴を単語で入力してカンマ(,)で区切ってください</p>
                 </div>
-                
+
                 <!-- Tag Preview Container -->
                 <div id="tag-preview-container" class="tag-preview-container"></div>
 
@@ -132,7 +135,7 @@
                 <button class="back-btn" id="btn-back-tags"><i class="fa-solid fa-arrow-left"></i> 戻る</button>
                 <h2>タグ一覧</h2>
             </div>
-            
+
             <div class="tag-cloud full-page" id="all-tags-list">
                 <!-- All unique tags injected here -->
                 <div class="empty-state" id="tags-empty-state" style="display: none;">
@@ -145,4 +148,5 @@
 
     <script src="app.js"></script>
 </body>
+
 </html>
