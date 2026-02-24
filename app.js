@@ -61,10 +61,16 @@ const Utils = {
             .filter(t => t.length > 0);
     },
 
-    compressImage(file, callback) {
+    compressImage(file, callback, errorCallback) {
         const reader = new FileReader();
+        reader.onerror = () => {
+            if (errorCallback) errorCallback('画像ファイルの読み込みに失敗しました。');
+        };
         reader.onload = (e) => {
             const img = new Image();
+            img.onerror = () => {
+                if (errorCallback) errorCallback('対応していない画像形式か、データが破損しています。\n(※iPhoneの高画質設定等の場合は、ブラウザが対応していない可能性があります)');
+            };
             img.onload = () => {
                 const canvas = document.createElement('canvas');
                 const targetSize = 256;
@@ -402,6 +408,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('input-avatar').addEventListener('change', (e) => {
         const file = e.target.files[0];
         if (file) {
+            // Optional: Show loading state here if needed
             Utils.compressImage(file, (base64) => {
                 document.getElementById('input-avatar-base64').value = base64;
                 const preview = document.getElementById('avatar-preview');
@@ -409,6 +416,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 preview.style.backgroundSize = 'cover';
                 preview.style.backgroundPosition = 'center';
                 document.getElementById('avatar-preview-icon').style.display = 'none';
+            }, (errorMsg) => {
+                alert(errorMsg);
+                e.target.value = ''; // Reset input to allow trying again
             });
         }
     });

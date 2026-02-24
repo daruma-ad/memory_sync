@@ -72,13 +72,16 @@
                 <input type="hidden" id="form-id">
 
                 <div class="avatar-selector">
-                    <input type="file" id="input-avatar" accept="image/*" style="display: none;">
+                    <input type="file" id="input-avatar" accept="image/*"
+                        style="opacity: 0; position: absolute; z-index: -1;">
                     <input type="hidden" id="input-avatar-base64">
-                    <div class="avatar-preview" id="avatar-preview"
-                        onclick="document.getElementById('input-avatar').click();">
-                        <i class="fa-solid fa-user" id="avatar-preview-icon"></i>
-                    </div>
-                    <p class="hint">タップして画像を選択</p>
+                    <label for="input-avatar"
+                        style="cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 12px; width: 100%;">
+                        <div class="avatar-preview" id="avatar-preview">
+                            <i class="fa-solid fa-user" id="avatar-preview-icon"></i>
+                        </div>
+                        <p class="hint">タップして画像を選択</p>
+                    </label>
                 </div>
 
                 <div class="input-group">
