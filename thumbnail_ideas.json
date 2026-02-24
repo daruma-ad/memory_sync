@@ -1,0 +1,57 @@
+{
+  "thumbnail_ideas": [
+    {
+      "id": 1,
+      "concept": "Before & After (The 'Aha!' Moment)",
+      "visuals": {
+        "left_side": {
+          "background": "dark gray, blurred",
+          "character": "confused holding a business card",
+          "text": "あの人...誰だっけ？ (Who was that person...?)"
+        },
+        "right_side": {
+          "background": "bright, glassmorphism style (app theme)",
+          "character": "smiling, confident",
+          "app_ui": "Anoano app screen showing a profile with #tags",
+          "text": "もう忘れない！ (I won't forget anymore!)"
+        }
+      },
+      "colors": ["#0f172a", "#6366f1", "#ffffff"],
+      "target_emotion": "Relief, Discovery"
+    },
+    {
+      "id": 2,
+      "concept": "App Showcase (Sleek & Modern)",
+      "visuals": {
+        "background": "radial gradient (dark blue to deep purple, matching app theme)",
+        "center_element": "3D isometric view of the Anoano app interface on a smartphone",
+        "floating_elements": [
+          "tag badges (#golf, #IT, #dog_lover)",
+          "brain icon (app logo)"
+        ],
+        "typography": {
+          "main_title": "anoano",
+          "subtitle": "人の記憶に特化した新感覚メモ",
+          "font_style": "bold, sans-serif"
+        }
+      },
+      "colors": ["#1e293b", "#3b82f6", "#6366f1", "#f8fafc"],
+      "target_emotion": "High-tech, Professional, Clean"
+    },
+    {
+      "id": 3,
+      "concept": "The Connectivity Network (Abstract)",
+      "visuals": {
+        "background": "dark blue with a subtle glowing network/node pattern",
+        "center_element": "A stylized human head silhouette filled with illuminated icons (tags, memo, people)",
+        "typography": {
+          "headline": "記憶をつなぐ、\nコミュニケーション革命。",
+          "highlight": "「anoano」リリース",
+          "position": "bottom center or left aligned"
+        }
+      },
+      "colors": ["#0f172a", "#00F2FE", "#4FACFE", "#ffffff"],
+      "target_emotion": "Innovative, Smart, Connected"
+    }
+  ]
+}

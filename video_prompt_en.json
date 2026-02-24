@@ -1,0 +1,37 @@
+{
+    "video_concept": "The Power of Remembering (14 seconds)",
+    "instructions": {
+        "duration_seconds": 14,
+        "visual_style": "Cinematic, modern, short depth of field, warm lighting",
+        "constraints": [
+            "NO text on screen",
+            "Focus on facial expressions and sleek abstract UI"
+        ]
+    },
+    "scenes": [
+        {
+            "time": "0s - 3s",
+            "visual_prompt": "Close-up of a professional looking confused and slightly embarrassed while holding a business card. Blurry background of a networking event. Cinematic lighting.",
+            "narration_english": "A familiar face... but the name escapes you."
+        },
+        {
+            "time": "4s - 6s",
+            "visual_prompt": "Close-up of a hand holding a modern smartphone. The screen displays a sleek, dark-themed glowing profile picture of a person with colorful floating nodes around them. No text visible on the screen, just abstract UI elements.",
+            "narration_english": "That's when 'anoano' comes in."
+        },
+        {
+            "time": "7s - 10s",
+            "visual_prompt": "Fast dynamic montage: The person on the smartphone screen tapping floating colorful abstract tags (resembling hashtags). The confused professional's face suddenly brightens up with an 'Aha!' expression.",
+            "narration_english": "Instantly recall details through tags and shared memories."
+        },
+        {
+            "time": "11s - 14s",
+            "visual_prompt": "Two professionals smiling and shaking hands warmly in clear focus. A glowing brain icon briefly subtly animates in the center of the screen before fading out. High quality, photorealistic.",
+            "narration_english": "anoano. The new way to connect through memory."
+        }
+    ],
+    "audio_guidance": {
+        "background_music": "Subtle, modern electronic beat building up to a positive, resolving chord at the end.",
+        "voice_over_tone": "Empathetic at first, transitioning to confident and warm."
+    }
+}

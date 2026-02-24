@@ -8,10 +8,10 @@ const AppState = {
     people: [],
     currentScreen: 'screen-home',
     filterTag: null,
-    
+
     // Gradients for avatars
     gradients: [
-        'bg-gradient-1', 'bg-gradient-2', 'bg-gradient-3', 
+        'bg-gradient-1', 'bg-gradient-2', 'bg-gradient-3',
         'bg-gradient-4', 'bg-gradient-5', 'bg-gradient-6'
     ]
 };
@@ -19,7 +19,7 @@ const AppState = {
 // --- STORAGE ---
 const Storage = {
     KEY: 'name-recall-app-data',
-    
+
     load() {
         const data = localStorage.getItem(this.KEY);
         if (data) {
@@ -28,7 +28,7 @@ const Storage = {
             AppState.people = [];
         }
     },
-    
+
     save() {
         localStorage.setItem(this.KEY, JSON.stringify(AppState.people));
     }
@@ -39,7 +39,7 @@ const Utils = {
     generateId() {
         return Math.random().toString(36).substr(2, 9);
     },
-    
+
     getInitials(name) {
         if (!name) return '?';
         const parts = name.trim().split(/\s+/);
@@ -48,7 +48,7 @@ const Utils = {
         }
         return name.charAt(0).toUpperCase();
     },
-    
+
     getRandomGradient() {
         const index = Math.floor(Math.random() * AppState.gradients.length);
         return AppState.gradients[index];
@@ -59,6 +59,34 @@ const Utils = {
         return tagString.split(',')
             .map(t => t.trim())
             .filter(t => t.length > 0);
+    },
+
+    compressImage(file, callback) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const img = new Image();
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                const targetSize = 256;
+                canvas.width = targetSize;
+                canvas.height = targetSize;
+                const ctx = canvas.getContext('2d');
+
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, targetSize, targetSize);
+
+                const size = Math.min(img.width, img.height);
+                const sx = (img.width - size) / 2;
+                const sy = (img.height - size) / 2;
+
+                ctx.drawImage(img, sx, sy, size, size, 0, 0, targetSize, targetSize);
+
+                const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
+                callback(dataUrl);
+            };
+            img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
     },
 
     getAllUniqueTags() {
@@ -79,7 +107,7 @@ const UI = {
         });
         document.getElementById(screenId).classList.add('active');
         AppState.currentScreen = screenId;
-        
+
         // Triggers based on screen
         if (screenId === 'screen-home') {
             this.renderPeopleList();
@@ -87,7 +115,7 @@ const UI = {
         } else if (screenId === 'screen-tags') {
             this.renderAllTags();
         }
-        
+
         // Scroll to top
         document.querySelector('.app-main').scrollTo(0, 0);
     },
@@ -96,12 +124,12 @@ const UI = {
     renderPeopleList(searchQuery = '') {
         const container = document.getElementById('people-list');
         const emptyState = document.getElementById('empty-state');
-        
+
         container.innerHTML = '';
-        
+
         // Filter logic
         let filteredPeople = AppState.people;
-        
+
         // 1. Tag Filter
         if (AppState.filterTag) {
             filteredPeople = filteredPeople.filter(p => p.tags.includes(AppState.filterTag));
@@ -114,8 +142,8 @@ const UI = {
         // 2. Search Box Filter
         if (searchQuery) {
             const query = searchQuery.toLowerCase();
-            filteredPeople = filteredPeople.filter(p => 
-                p.name.toLowerCase().includes(query) || 
+            filteredPeople = filteredPeople.filter(p =>
+                p.name.toLowerCase().includes(query) ||
                 p.tags.some(tag => tag.toLowerCase().includes(query)) ||
                 (p.memo && p.memo.toLowerCase().includes(query))
             );
@@ -142,21 +170,25 @@ const UI = {
         // Render cards
         filteredPeople.forEach((person, index) => {
             const delay = index * 0.05; // Staggered animation
-            
+
             const card = document.createElement('div');
             card.className = 'person-card glass-panel animate-slide-up';
             card.style.animationDelay = `${delay}s`;
             card.onclick = () => this.showDetail(person.id);
 
-            const tagsHtml = person.tags.slice(0, 3).map(tag => 
+            const tagsHtml = person.tags.slice(0, 3).map(tag =>
                 `<span class="tag-badge">#${tag}</span>`
             ).join('');
-            
-            const moreTags = person.tags.length > 3 ? 
+
+            const moreTags = person.tags.length > 3 ?
                 `<span class="tag-badge" style="background: transparent; border: none; padding-left:0;">+${person.tags.length - 3}</span>` : '';
 
+            const avatarHtml = person.avatar
+                ? `<div class="card-avatar" style="background-image: url(${person.avatar}); background-size: cover; background-position: center;"></div>`
+                : `<div class="card-avatar ${person.colorVariant}">${Utils.getInitials(person.name)}</div>`;
+
             card.innerHTML = `
-                <div class="card-avatar ${person.colorVariant}">${Utils.getInitials(person.name)}</div>
+                ${avatarHtml}
                 <div class="card-info">
                     <h3 class="card-name">${person.name}</h3>
                     <div class="card-tags">
@@ -183,12 +215,21 @@ const UI = {
 
         // Populate detail screen
         const avatarEl = document.getElementById('detail-avatar');
-        avatarEl.className = `detail-avatar ${person.colorVariant}`;
-        avatarEl.textContent = Utils.getInitials(person.name);
+        if (person.avatar) {
+            avatarEl.className = 'detail-avatar';
+            avatarEl.style.backgroundImage = `url(${person.avatar})`;
+            avatarEl.style.backgroundSize = 'cover';
+            avatarEl.style.backgroundPosition = 'center';
+            avatarEl.textContent = '';
+        } else {
+            avatarEl.className = `detail-avatar ${person.colorVariant}`;
+            avatarEl.style.backgroundImage = '';
+            avatarEl.textContent = Utils.getInitials(person.name);
+        }
 
         document.getElementById('detail-name').textContent = person.name;
-        
-        document.getElementById('detail-tags').innerHTML = person.tags.map(tag => 
+
+        document.getElementById('detail-tags').innerHTML = person.tags.map(tag =>
             `<span class="tag-badge active">#${tag}</span>`
         ).join('');
 
@@ -211,21 +252,41 @@ const UI = {
         const inputName = document.getElementById('input-name');
         const inputTags = document.getElementById('input-tags');
         const inputMemo = document.getElementById('input-memo');
-        
+        const inputAvatarBase64 = document.getElementById('input-avatar-base64');
+        const inputAvatarFile = document.getElementById('input-avatar');
+        const avatarPreview = document.getElementById('avatar-preview');
+        const avatarPreviewIcon = document.getElementById('avatar-preview-icon');
+
+        if (inputAvatarFile) inputAvatarFile.value = '';
+
         if (personToEdit) {
             formTitle.textContent = '情報を編集';
             formId.value = personToEdit.id;
             inputName.value = personToEdit.name;
             inputTags.value = personToEdit.tags.join(', ');
             inputMemo.value = personToEdit.memo;
+            inputAvatarBase64.value = personToEdit.avatar || '';
+
+            if (personToEdit.avatar) {
+                avatarPreview.style.backgroundImage = `url(${personToEdit.avatar})`;
+                avatarPreview.style.backgroundSize = 'cover';
+                avatarPreview.style.backgroundPosition = 'center';
+                avatarPreviewIcon.style.display = 'none';
+            } else {
+                avatarPreview.style.backgroundImage = '';
+                avatarPreviewIcon.style.display = 'block';
+            }
         } else {
             formTitle.textContent = '新しい人を追加';
             formId.value = '';
             inputName.value = '';
             inputTags.value = '';
             inputMemo.value = '';
+            inputAvatarBase64.value = '';
+            avatarPreview.style.backgroundImage = '';
+            avatarPreviewIcon.style.display = 'block';
         }
-        
+
         this.renderFormTags(inputTags.value);
         this.navigateTo('screen-form');
         setTimeout(() => inputName.focus(), 300);
@@ -234,17 +295,19 @@ const UI = {
     // Save person from form
     savePerson(e) {
         e.preventDefault();
-        
+
         const id = document.getElementById('form-id').value;
         const name = document.getElementById('input-name').value;
         const tagsStr = document.getElementById('input-tags').value;
         const memo = document.getElementById('input-memo').value;
+        const avatarBase64 = document.getElementById('input-avatar-base64').value;
 
         const personData = {
             id: id || Utils.generateId(),
             name: name,
             tags: Utils.parseTags(tagsStr),
             memo: memo,
+            avatar: avatarBase64 || null,
             colorVariant: id ? AppState.people.find(p => p.id === id).colorVariant : Utils.getRandomGradient(),
             updatedAt: new Date().toISOString()
         };
@@ -259,7 +322,7 @@ const UI = {
         }
 
         Storage.save();
-        
+
         // Go back to home or detail
         this.navigateTo('screen-home');
     },
@@ -278,38 +341,38 @@ const UI = {
         const container = document.getElementById('all-tags-list');
         const emptyState = document.getElementById('tags-empty-state');
         const tags = Utils.getAllUniqueTags();
-        
+
         container.innerHTML = '';
         container.appendChild(emptyState); // Keep reference
-        
+
         if (tags.length === 0) {
             emptyState.style.display = 'block';
             return;
         }
-        
+
         emptyState.style.display = 'none';
-        
+
         tags.forEach((tag, index) => {
             const badge = document.createElement('span');
             badge.className = 'tag-badge animate-slide-up';
             badge.style.animationDelay = `${index * 0.03}s`;
             badge.textContent = `#${tag}`;
-            
+
             // Get count of people with this tag
             const count = AppState.people.filter(p => p.tags.includes(tag)).length;
-            
+
             const countSpan = document.createElement('span');
             countSpan.style.opacity = '0.7';
             countSpan.style.fontSize = '0.8em';
             countSpan.style.marginLeft = '6px';
             countSpan.textContent = `(${count})`;
             badge.appendChild(countSpan);
-            
+
             badge.onclick = () => {
                 AppState.filterTag = tag;
                 this.navigateTo('screen-home');
             };
-            
+
             container.appendChild(badge);
         });
     },
@@ -324,28 +387,43 @@ const UI = {
 // --- INITIALIZATION ---
 document.addEventListener('DOMContentLoaded', () => {
     Storage.load();
-    
+
     // Setup Event Listeners
-    
+
     // Header actions
     document.getElementById('btn-add-person').addEventListener('click', () => UI.openForm());
     document.getElementById('btn-show-tags').addEventListener('click', () => UI.navigateTo('screen-tags'));
-    
+
     // Form actions
     document.getElementById('person-form').addEventListener('submit', (e) => UI.savePerson(e));
     document.getElementById('input-tags').addEventListener('input', (e) => UI.renderFormTags(e.target.value));
-    
+
+    // Image Upload
+    document.getElementById('input-avatar').addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            Utils.compressImage(file, (base64) => {
+                document.getElementById('input-avatar-base64').value = base64;
+                const preview = document.getElementById('avatar-preview');
+                preview.style.backgroundImage = `url(${base64})`;
+                preview.style.backgroundSize = 'cover';
+                preview.style.backgroundPosition = 'center';
+                document.getElementById('avatar-preview-icon').style.display = 'none';
+            });
+        }
+    });
+
     // Back buttons
     document.getElementById('btn-back-form').addEventListener('click', () => UI.navigateTo('screen-home'));
     document.getElementById('btn-back-detail').addEventListener('click', () => UI.navigateTo('screen-home'));
     document.getElementById('btn-back-tags').addEventListener('click', () => UI.navigateTo('screen-home'));
-    
+
     // Search
     document.getElementById('search-input').addEventListener('input', (e) => UI.renderPeopleList(e.target.value));
-    
+
     // Filter clear
     document.getElementById('current-filter-tag').addEventListener('click', () => UI.clearFilter());
-    
+
     // Initial Render
     UI.navigateTo('screen-home');
 });

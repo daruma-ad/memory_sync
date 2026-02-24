@@ -1,0 +1,34 @@
+{
+  "video_concept": "The Power of Remembering (13 seconds)",
+  "instructions": {
+    "duration_seconds": 13,
+    "visual_style": "Cinematic, modern, short depth of field, warm lighting",
+    "constraints": ["NO text on screen", "Focus on facial expressions and sleek UI"]
+  },
+  "scenes": [
+    {
+      "time": "0s - 3s",
+      "visual_prompt": "Close-up of a diverse professional looking confused and slightly embarrassed while holding a business card. Blurry background of a networking event. Cinematic lighting.",
+      "narration_japanese": "「顔はわかるのに、名前が出ない…」"
+    },
+    {
+      "time": "4s - 6s",
+      "visual_prompt": "Close-up of a hand holding a modern smartphone. The screen displays a sleek, dark-themed glowing profile picture of a person with colorful floating nodes around them. No text visible on the screen, just abstract UI elements.",
+      "narration_japanese": "そんな時こそ、「anoano」の出番です。"
+    },
+    {
+      "time": "7s - 10s",
+      "visual_prompt": "Fast dynamic montage: The person on the smartphone screen tapping floating colorful abstract tags (resembling hashtags). The confused professional's face suddenly brightens up with an 'Aha!' expression.",
+      "narration_japanese": "タグとエピソードで、人の記憶を瞬時に引き出す。"
+    },
+    {
+      "time": "11s - 13s",
+      "visual_prompt": "Two professionals smiling and shaking hands warmly in clear focus. A glowing brain icon briefly subtly animates in the center of the screen before fading out. High quality, photorealistic.",
+      "narration_japanese": "記憶をつなぐ新感覚メモ、anoano。"
+    }
+  ],
+  "audio_guidance": {
+    "background_music": "Subtle, modern electronic beat building up to a positive, resolving chord at the end.",
+    "voice_over_tone": "Empathetic at first, transitioning to confident and warm."
+  }
+}
