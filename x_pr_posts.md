@@ -6,7 +6,7 @@
 "どこで会ったか" "趣味" などをタグ付けして、曖昧な記憶からでも瞬時に名前を引き出せます。
 インストール不要でサクサク動きます✨
 ぜひ試してみてください👇
-[リンク]
+https://daruma-ad.github.io/memory_sync/
 #個人開発 #アプリ紹介 #anoano
 
 **ポスト案 2 (機能紹介重視)**
@@ -16,7 +16,7 @@
 ✅ エピソードを簡単なメモに残せる
 ✅ オシャレなダークUI
 次会う時もスムーズに話せます！👇
-[リンク]
+https://daruma-ad.github.io/memory_sync/
 #ライフハック #ビジネスツール #anoano
 
 ---
@@ -28,7 +28,7 @@ Tired of thinking "Who was that person again...?" 📱
 Just released "anoano" - a note app dedicated to remembering people!
 Tag traits like "where we met" or "hobbies" so you can instantly recall names even from blurry memories.
 Fast & no install required ✨ Try it out!👇
-[Link]
+https://daruma-ad.github.io/memory_sync_en/
 #indiedev #productivity #anoano
 
 **Post Idea 2 (Feature Focus)**

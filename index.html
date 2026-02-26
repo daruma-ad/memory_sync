@@ -30,6 +30,9 @@
             <button class="icon-btn" id="btn-show-tags" aria-label="Tags">
                 <i class="fa-solid fa-tags"></i>
             </button>
+            <button class="icon-btn" id="btn-show-settings" aria-label="Settings">
+                <i class="fa-solid fa-gear"></i>
+            </button>
             <button class="icon-btn primary" id="btn-add-person" aria-label="Add Person">
                 <i class="fa-solid fa-plus"></i>
             </button>
@@ -153,6 +156,86 @@
                 </div>
             </div>
         </section>
+
+        <!-- Screen 5: Settings -->
+        <section id="screen-settings" class="screen">
+            <div class="screen-header">
+                <button class="back-btn" id="btn-back-settings"><i class="fa-solid fa-arrow-left"></i> 戻る</button>
+                <h2>設定</h2>
+            </div>
+
+            <div class="settings-content">
+                <!-- Data Stats -->
+                <div class="settings-card glass-panel">
+                    <div class="settings-card-header">
+                        <i class="fa-solid fa-database section-icon"></i>
+                        <h3>データ情報</h3>
+                    </div>
+                    <div class="data-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">登録人数</span>
+                            <span class="stat-value" id="stat-people-count">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">タグ数</span>
+                            <span class="stat-value" id="stat-tags-count">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">データサイズ</span>
+                            <span class="stat-value" id="stat-data-size">0 KB</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Backup -->
+                <div class="settings-card glass-panel">
+                    <div class="settings-card-header">
+                        <i class="fa-solid fa-download section-icon"></i>
+                        <h3>データをバックアップ</h3>
+                    </div>
+                    <p class="settings-desc">現在のデータをJSONファイルとしてダウンロードします。<br>端末の機種変更やバックアップに便利です。</p>
+                    <button class="settings-btn export-btn" id="btn-export">
+                        <i class="fa-solid fa-file-arrow-down"></i> バックアップファイルをダウンロード
+                    </button>
+                </div>
+
+                <!-- Restore -->
+                <div class="settings-card glass-panel">
+                    <div class="settings-card-header">
+                        <i class="fa-solid fa-upload section-icon"></i>
+                        <h3>データを復元</h3>
+                    </div>
+                    <p class="settings-desc">バックアップファイルからデータを読み込みます。<br>読み込みモードを選択できます。</p>
+                    <input type="file" id="input-import-file" accept=".json" style="display: none;">
+                    <button class="settings-btn import-btn" id="btn-import">
+                        <i class="fa-solid fa-file-arrow-up"></i> バックアップファイルを選択
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Import Mode Modal -->
+        <div class="modal-overlay" id="import-modal" style="display: none;">
+            <div class="modal-content glass-panel">
+                <h3><i class="fa-solid fa-circle-question"></i> 読み込みモードを選択</h3>
+                <div class="import-preview" id="import-preview">
+                    <!-- Preview info injected here -->
+                </div>
+                <div class="modal-actions">
+                    <button class="modal-btn merge-btn" id="btn-import-merge">
+                        <i class="fa-solid fa-code-merge"></i>
+                        <span class="modal-btn-title">マージ（統合）</span>
+                        <span class="modal-btn-desc">既存データを残して新しいデータを追加</span>
+                    </button>
+                    <button class="modal-btn overwrite-btn" id="btn-import-overwrite">
+                        <i class="fa-solid fa-rotate"></i>
+                        <span class="modal-btn-title">上書き（置換）</span>
+                        <span class="modal-btn-desc">既存データをすべて置き換える</span>
+                    </button>
+                </div>
+                <button class="modal-cancel" id="btn-import-cancel">キャンセル</button>
+            </div>
+        </div>
 
     </main>
 

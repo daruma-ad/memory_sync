@@ -34,6 +34,181 @@ const Storage = {
     }
 };
 
+// --- DATA MANAGER (Export / Import) ---
+const DataManager = {
+    pendingImportData: null,
+
+    // Export data as JSON file download
+    exportData() {
+        if (AppState.people.length === 0) {
+            this.showToast('データがありません', 'error');
+            return;
+        }
+
+        const exportObj = {
+            appName: 'anoano',
+            version: '1.0',
+            exportDate: new Date().toISOString(),
+            peopleCount: AppState.people.length,
+            data: AppState.people
+        };
+
+        const jsonStr = JSON.stringify(exportObj, null, 2);
+        const blob = new Blob([jsonStr], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+
+        const today = new Date().toISOString().split('T')[0];
+        const filename = `anoano_backup_${today}.json`;
+
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+
+        this.showToast(`✅ ${AppState.people.length}件のデータをエクスポートしました`, 'success');
+    },
+
+    // Read and validate import file
+    readImportFile(file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            try {
+                const parsed = JSON.parse(e.target.result);
+
+                // Validate structure
+                if (!parsed.data || !Array.isArray(parsed.data)) {
+                    this.showToast('❗ 無効なファイル形式です', 'error');
+                    return;
+                }
+
+                // Validate each person has required fields
+                const valid = parsed.data.every(p => p.id && p.name && Array.isArray(p.tags));
+                if (!valid) {
+                    this.showToast('❗ データ形式が正しくありません', 'error');
+                    return;
+                }
+
+                this.pendingImportData = parsed.data;
+                this.showImportModal(parsed);
+            } catch (err) {
+                this.showToast('❗ JSONの解析に失敗しました', 'error');
+            }
+        };
+        reader.readAsText(file);
+    },
+
+    // Show import modal with preview
+    showImportModal(parsed) {
+        const preview = document.getElementById('import-preview');
+        const importDate = parsed.exportDate
+            ? new Date(parsed.exportDate).toLocaleString('ja-JP')
+            : '不明';
+
+        // Count new vs existing
+        const existingIds = new Set(AppState.people.map(p => p.id));
+        const newCount = parsed.data.filter(p => !existingIds.has(p.id)).length;
+        const updateCount = parsed.data.filter(p => existingIds.has(p.id)).length;
+
+        preview.innerHTML = `
+            <strong>ファイル情報</strong><br>
+            📅 エクスポート日: ${importDate}<br>
+            👥 人数: ${parsed.data.length}件<br>
+            🆕 新規: ${newCount}件　🔄 更新: ${updateCount}件
+        `;
+
+        document.getElementById('import-modal').style.display = 'flex';
+    },
+
+    hideImportModal() {
+        document.getElementById('import-modal').style.display = 'none';
+        this.pendingImportData = null;
+        // Reset file input
+        document.getElementById('input-import-file').value = '';
+    },
+
+    // Merge: keep existing, add new, update matched IDs
+    importMerge() {
+        if (!this.pendingImportData) return;
+
+        const existingMap = new Map(AppState.people.map(p => [p.id, p]));
+        let addedCount = 0;
+        let updatedCount = 0;
+
+        this.pendingImportData.forEach(imported => {
+            if (existingMap.has(imported.id)) {
+                // Update existing
+                const idx = AppState.people.findIndex(p => p.id === imported.id);
+                if (idx !== -1) {
+                    AppState.people[idx] = imported;
+                    updatedCount++;
+                }
+            } else {
+                // Add new
+                AppState.people.push(imported);
+                addedCount++;
+            }
+        });
+
+        Storage.save();
+        this.hideImportModal();
+        UI.renderPeopleList();
+        this.updateStats();
+        this.showToast(`✅ ${addedCount}件追加、${updatedCount}件更新しました`, 'success');
+    },
+
+    // Overwrite: replace all data
+    importOverwrite() {
+        if (!this.pendingImportData) return;
+
+        if (!confirm(`⚠️ 現在の${AppState.people.length}件のデータがすべて置き換えられます。\nよろしいですか？`)) {
+            return;
+        }
+
+        const count = this.pendingImportData.length;
+        AppState.people = [...this.pendingImportData];
+        Storage.save();
+        this.hideImportModal();
+        UI.renderPeopleList();
+        this.updateStats();
+        this.showToast(`✅ ${count}件のデータに置き換えました`, 'success');
+    },
+
+    // Update settings stats display
+    updateStats() {
+        document.getElementById('stat-people-count').textContent = AppState.people.length;
+        document.getElementById('stat-tags-count').textContent = Utils.getAllUniqueTags().length;
+
+        const dataStr = localStorage.getItem(Storage.KEY) || '';
+        const sizeKB = (new Blob([dataStr]).size / 1024).toFixed(1);
+        document.getElementById('stat-data-size').textContent = `${sizeKB} KB`;
+    },
+
+    // Toast notification
+    showToast(message, type = 'success') {
+        // Remove any existing toast
+        const existing = document.querySelector('.toast');
+        if (existing) existing.remove();
+
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        toast.textContent = message;
+        document.body.appendChild(toast);
+
+        // Trigger animation
+        requestAnimationFrame(() => {
+            toast.classList.add('show');
+        });
+
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => toast.remove(), 400);
+        }, 3000);
+    }
+};
+
 // --- UTILS ---
 const Utils = {
     generateId() {
@@ -399,6 +574,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Header actions
     document.getElementById('btn-add-person').addEventListener('click', () => UI.openForm());
     document.getElementById('btn-show-tags').addEventListener('click', () => UI.navigateTo('screen-tags'));
+    document.getElementById('btn-show-settings').addEventListener('click', () => {
+        DataManager.updateStats();
+        UI.navigateTo('screen-settings');
+    });
 
     // Form actions
     document.getElementById('person-form').addEventListener('submit', (e) => UI.savePerson(e));
@@ -408,7 +587,6 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('input-avatar').addEventListener('change', (e) => {
         const file = e.target.files[0];
         if (file) {
-            // Optional: Show loading state here if needed
             Utils.compressImage(file, (base64) => {
                 document.getElementById('input-avatar-base64').value = base64;
                 const preview = document.getElementById('avatar-preview');
@@ -418,7 +596,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('avatar-preview-icon').style.display = 'none';
             }, (errorMsg) => {
                 alert(errorMsg);
-                e.target.value = ''; // Reset input to allow trying again
+                e.target.value = '';
             });
         }
     });
@@ -427,12 +605,30 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('btn-back-form').addEventListener('click', () => UI.navigateTo('screen-home'));
     document.getElementById('btn-back-detail').addEventListener('click', () => UI.navigateTo('screen-home'));
     document.getElementById('btn-back-tags').addEventListener('click', () => UI.navigateTo('screen-home'));
+    document.getElementById('btn-back-settings').addEventListener('click', () => UI.navigateTo('screen-home'));
 
     // Search
     document.getElementById('search-input').addEventListener('input', (e) => UI.renderPeopleList(e.target.value));
 
     // Filter clear
     document.getElementById('current-filter-tag').addEventListener('click', () => UI.clearFilter());
+
+    // --- Settings: Export / Import ---
+    document.getElementById('btn-export').addEventListener('click', () => DataManager.exportData());
+
+    document.getElementById('btn-import').addEventListener('click', () => {
+        document.getElementById('input-import-file').click();
+    });
+
+    document.getElementById('input-import-file').addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) DataManager.readImportFile(file);
+    });
+
+    // Import modal buttons
+    document.getElementById('btn-import-merge').addEventListener('click', () => DataManager.importMerge());
+    document.getElementById('btn-import-overwrite').addEventListener('click', () => DataManager.importOverwrite());
+    document.getElementById('btn-import-cancel').addEventListener('click', () => DataManager.hideImportModal());
 
     // Initial Render
     UI.navigateTo('screen-home');

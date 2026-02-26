@@ -21,7 +21,7 @@ title: YouTube Description (JP & EN)
 
 ビジネスでの人脈管理、イベントでの出会いの記録、新しい環境での名前覚えに最適です！
 
-👉 **今すぐ無料で試す:** [\[ここにアプリのURLを挿入 / Insert app link here\]](https://daruma-ad.github.io/memory_sync/)
+👉 **今すぐ無料で試す:** https://daruma-ad.github.io/memory_sync/
 
 気に入っていただけたら、ぜひ高評価とチャンネル登録をお願いします！
 
@@ -48,7 +48,7 @@ Meet **anoano**, a dedicated note-taking app designed specifically to help you r
 
 Perfect for managing business connections, keeping track of people you meet at events, or simply remembering names in a new environment!
 
-👉 **Try it for free today:** [\[Insert app link here\]](https://daruma-ad.github.io/memory_sync/)
+👉 **Try it for free today:** https://daruma-ad.github.io/memory_sync_en/
 
 If you found this helpful, please like the video and subscribe to our channel!
 
