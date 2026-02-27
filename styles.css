@@ -1,25 +1,32 @@
 /* CSS Variables for Theming - Deep Modern Dark Theme */
 :root {
-    --bg-primary: #0f172a; /* Tailwind slate-900 */
-    --bg-secondary: #1e293b; /* Tailwind slate-800 */
+    --bg-primary: #0f172a;
+    /* Tailwind slate-900 */
+    --bg-secondary: #1e293b;
+    /* Tailwind slate-800 */
     --glass-bg: rgba(30, 41, 59, 0.7);
     --glass-border: rgba(255, 255, 255, 0.1);
-    
-    --text-primary: #f8fafc; /* slate-50 */
-    --text-secondary: #94a3b8; /* slate-400 */
-    
-    --accent-primary: #6366f1; /* Indigo 500 */
-    --accent-primary-hover: #4f46e5; /* Indigo 600 */
-    --accent-secondary: #3b82f6; /* Blue 500 */
-    
+
+    --text-primary: #f8fafc;
+    /* slate-50 */
+    --text-secondary: #94a3b8;
+    /* slate-400 */
+
+    --accent-primary: #6366f1;
+    /* Indigo 500 */
+    --accent-primary-hover: #4f46e5;
+    /* Indigo 600 */
+    --accent-secondary: #3b82f6;
+    /* Blue 500 */
+
     --danger: #ef4444;
-    
+
     --card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.15);
     --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-    
+
     --transition-fast: 0.2s ease;
     --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    
+
     --border-radius-sm: 8px;
     --border-radius-md: 16px;
     --border-radius-lg: 24px;
@@ -36,7 +43,7 @@
 body {
     font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
     background-color: var(--bg-primary);
-    background-image: 
+    background-image:
         radial-gradient(circle at 15% 50%, rgba(99, 102, 241, 0.08) 0%, transparent 50%),
         radial-gradient(circle at 85% 30%, rgba(59, 130, 246, 0.08) 0%, transparent 50%);
     background-attachment: fixed;
@@ -86,7 +93,7 @@ button {
 
 .icon-btn:hover {
     color: var(--text-primary);
-    background: rgba(255,255,255,0.1);
+    background: rgba(255, 255, 255, 0.1);
     transform: translateY(-2px);
 }
 
@@ -178,7 +185,10 @@ button {
 .app-main {
     flex: 1;
     position: relative;
-    overflow: hidden; /* For screen transitions */
+    overflow: hidden;
+    /* For screen transitions */
+    -webkit-overflow-scrolling: touch;
+    /* iOS scroll fix */
 }
 
 /* Screen Management */
@@ -195,8 +205,9 @@ button {
     transition: all var(--transition-normal);
     overflow-y: auto;
     /* Hide scrollbar for clean aesthetic */
-    scrollbar-width: none; 
+    scrollbar-width: none;
 }
+
 .screen::-webkit-scrollbar {
     display: none;
 }
@@ -230,8 +241,11 @@ button {
     background: var(--bg-secondary);
     color: var(--text-primary);
     font-family: inherit;
-    font-size: 1rem;
+    font-size: 16px;
+    /* iOS auto-zoom prevention */
     transition: border-color var(--transition-fast);
+    -webkit-appearance: none;
+    appearance: none;
 }
 
 .search-bar input:focus {
@@ -273,7 +287,8 @@ button {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 16px;
-    padding-bottom: 80px; /* Space for FAB if added */
+    padding-bottom: 80px;
+    /* Space for FAB if added */
 }
 
 /* Person Card */
@@ -288,8 +303,8 @@ button {
 
 .person-card:hover {
     transform: translateY(-4px);
-    border-color: rgba(255,255,255,0.2);
-    box-shadow: 0 12px 24px -8px rgba(0,0,0,0.5);
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 12px 24px -8px rgba(0, 0, 0, 0.5);
     background: rgba(30, 41, 59, 0.9);
 }
 
@@ -303,7 +318,7 @@ button {
     font-size: 1.5rem;
     color: white;
     font-weight: 600;
-    box-shadow: inset 0 2px 4px rgba(255,255,255,0.2);
+    box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.2);
     flex-shrink: 0;
 }
 
@@ -432,8 +447,12 @@ button {
     border-radius: var(--border-radius-sm);
     color: var(--text-primary);
     font-family: inherit;
-    font-size: 1rem;
+    font-size: 16px;
+    /* iOS auto-zoom prevention: must be >= 16px */
     transition: all var(--transition-fast);
+    -webkit-appearance: none;
+    /* iOS input styling fix */
+    appearance: none;
 }
 
 .input-group input:focus,
@@ -484,7 +503,7 @@ button {
     color: white;
     font-weight: 700;
     margin-bottom: 20px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.4), inset 0 2px 5px rgba(255,255,255,0.3);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4), inset 0 2px 5px rgba(255, 255, 255, 0.3);
 }
 
 .detail-name {
@@ -535,17 +554,41 @@ button {
 }
 
 /* Helper class for colors */
-.bg-gradient-1 { background: linear-gradient(135deg, #FF6B6B, #FF8E53); }
-.bg-gradient-2 { background: linear-gradient(135deg, #4FACFE, #00F2FE); }
-.bg-gradient-3 { background: linear-gradient(135deg, #43E97B, #38F9D7); }
-.bg-gradient-4 { background: linear-gradient(135deg, #FA709A, #FEE140); }
-.bg-gradient-5 { background: linear-gradient(135deg, #a18cd1, #fbc2eb); }
-.bg-gradient-6 { background: linear-gradient(135deg, #84fab0, #8fd3f4); }
+.bg-gradient-1 {
+    background: linear-gradient(135deg, #FF6B6B, #FF8E53);
+}
+
+.bg-gradient-2 {
+    background: linear-gradient(135deg, #4FACFE, #00F2FE);
+}
+
+.bg-gradient-3 {
+    background: linear-gradient(135deg, #43E97B, #38F9D7);
+}
+
+.bg-gradient-4 {
+    background: linear-gradient(135deg, #FA709A, #FEE140);
+}
+
+.bg-gradient-5 {
+    background: linear-gradient(135deg, #a18cd1, #fbc2eb);
+}
+
+.bg-gradient-6 {
+    background: linear-gradient(135deg, #84fab0, #8fd3f4);
+}
 
 /* Animation Utility */
 @keyframes slideUp {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .animate-slide-up {
@@ -667,8 +710,13 @@ button {
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
 
 .modal-content {

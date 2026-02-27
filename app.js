@@ -470,7 +470,8 @@ const UI = {
 
         this.renderFormTags(inputTags.value);
         this.navigateTo('screen-form');
-        setTimeout(() => inputName.focus(), 300);
+        // Note: iOS Safari does not allow programmatic focus (keyboard won't appear)
+        // User taps the input field directly instead
     },
 
     // Save person from form
